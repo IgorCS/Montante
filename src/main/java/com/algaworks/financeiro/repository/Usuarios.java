@@ -5,9 +5,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.NoResultException;
-import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
 import com.algaworks.financeiro.controller.Usuario;
@@ -41,13 +38,15 @@ public class Usuarios implements Serializable {
 		TypedQuery<Usuario> query = manager.createQuery("from Usuario", Usuario.class);
 		return query.getResultList();
 	}
+	
+	
 
 	public Usuario userLogin() {
 		TypedQuery<Usuario> query = manager.createQuery("from Usuario", Usuario.class);
 		return query.getSingleResult();
 	}
 
-	public Usuario getUsuario(String nome, String senha) {
+	/*public Usuario getUsuario(String nome, String senha) {
 
 		EntityManagerFactory factory = Persistence.createEntityManagerFactory("usuarios");
 		EntityManager em = factory.createEntityManager();
@@ -62,6 +61,6 @@ public class Usuarios implements Serializable {
 			return null;
 		}
 
-	}
+	}*/
 
 }

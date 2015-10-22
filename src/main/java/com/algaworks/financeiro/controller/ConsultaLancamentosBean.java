@@ -32,6 +32,7 @@ public class ConsultaLancamentosBean implements Serializable {
 
 	@Inject
 	private Pessoas pessoas;
+	
 
 	private List<Lancamento> lancamentos;
 
@@ -60,6 +61,8 @@ public class ConsultaLancamentosBean implements Serializable {
 	/* PEGA PELO NOME PESSOA */
 
 	private Pessoa pessoa;
+	
+	
 
 	public Pessoa getPessoa() {
 		return pessoa;
@@ -67,6 +70,17 @@ public class ConsultaLancamentosBean implements Serializable {
 
 	public void setPessoa(Pessoa pessoa) {
 		this.pessoa = pessoa;
+	}
+	
+	private Usuario usuario;
+	
+	
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
 	}
 
 	// POR NOME
@@ -113,6 +127,7 @@ public class ConsultaLancamentosBean implements Serializable {
 		this.todasPessoas = this.pessoas.todasPessoas();
 		this.lancamento = new Lancamento();
 		this.pessoa = new Pessoa();
+		
 
 	}
 	
@@ -155,7 +170,7 @@ public class ConsultaLancamentosBean implements Serializable {
 
 	public void calculaLucro() throws NegocioException {
 
-		FacesContext context = FacesContext.getCurrentInstance();
+		//FacesContext context = FacesContext.getCurrentInstance();
 		//Aqui faz a busca em lancamento pela Pessoa
 		this.lancamentos = lancamentosRepository.lancePessoa(pessoa);
 

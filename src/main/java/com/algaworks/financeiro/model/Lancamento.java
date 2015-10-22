@@ -20,6 +20,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.algaworks.financeiro.controller.Usuario;
 import com.algaworks.financeiro.validation.DecimalPositivo;
 
 @Entity
@@ -30,6 +31,9 @@ public class Lancamento implements Serializable {
 	
 	private Long id;
 	private Pessoa pessoa;
+	private Usuario usuario;
+	
+
 	private String descricao;
 	private BigDecimal valor;
 	//private BigDecimal valorTotal;
@@ -57,6 +61,18 @@ public class Lancamento implements Serializable {
 	public void setPessoa(Pessoa pessoa) {
 		this.pessoa = pessoa;
 	}
+	
+	@NotNull
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "usuario_id")
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+	
 
 	@NotEmpty
 	@Size(max = 80)

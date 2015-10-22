@@ -14,6 +14,7 @@ import com.algaworks.financeiro.model.Pessoa;
 import com.algaworks.financeiro.model.TipoLancamento;
 import com.algaworks.financeiro.repository.Lancamentos;
 import com.algaworks.financeiro.repository.Pessoas;
+import com.algaworks.financeiro.repository.Usuarios;
 import com.algaworks.financeiro.service.CadastroLancamentos;
 import com.algaworks.financeiro.service.NegocioException;
 
@@ -30,13 +31,28 @@ public class CadastroLancamentoBean implements Serializable {
 	private Pessoas pessoas;
 	
 	@Inject
+	private Usuarios usuarios;
+	
+	@Inject
 	private Lancamentos lancamentos;
 	
 	private Lancamento lancamento;
+	
 	private List<Pessoa> todasPessoas;
+	
+	private List<Usuario> todosUsuarios;
+
+	public void setTodasPessoas(List<Pessoa> todasPessoas) {
+		this.todasPessoas = todasPessoas;
+	}
+
+	public void setTodosUsuarios(List<Usuario> todosUsuarios) {
+		this.todosUsuarios = todosUsuarios;
+	}
 
 	public void prepararCadastro() {
 		this.todasPessoas = this.pessoas.todas();
+		this.todosUsuarios = this.usuarios.todosUsuarios();
 		
 		if (this.lancamento == null) {
 			this.lancamento = new Lancamento();
@@ -71,6 +87,10 @@ public class CadastroLancamentoBean implements Serializable {
 	
 	public List<Pessoa> getTodasPessoas() {
 		return this.todasPessoas;
+	}
+	
+	public List<Usuario> getTodosUsuarios() {
+		return this.todosUsuarios;
 	}
 	
 	public TipoLancamento[] getTiposLancamentos() {

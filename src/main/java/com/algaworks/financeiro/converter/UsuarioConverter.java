@@ -14,11 +14,11 @@ public class UsuarioConverter implements Converter {
 
 	@Inject // funciona graças ao OmniFaces
 	private Usuarios usuarios;
-
+	
 	@Override
 	public Object getAsObject(FacesContext context, UIComponent component, String value) {
 		Usuario retorno = null;
-
+		
 		if (value != null && !"".equals(value)) {
 			retorno = this.usuarios.porId(new Long(value));
 		}
@@ -29,16 +29,18 @@ public class UsuarioConverter implements Converter {
 	@Override
 	public String getAsString(FacesContext context, UIComponent component, Object value) {
 		if (value != null) {
-			Usuario usuario = ((Usuario) value);
+			Usuario usuario = ((Usuario) value); 
 			return usuario.getId() == null ? null : usuario.getId().toString();
-			// return ((Usuario) value).getId().toString();
+			//return ((Pessoa) value).getId().toString();
 		}
 		return null;
 	}
-	/*
-	 * @Override public String getAsString(FacesContext context, UIComponent
-	 * component, Object value) { if (value != null) { Lancamento lancamento =
-	 * ((Lancamento) value); return lancamento.getId() == null ? null :
-	 * lancamento.getId().toString(); } return null; }
-	 */
+	/*@Override
+	public String getAsString(FacesContext context, UIComponent component, Object value) {
+		if (value != null) {
+			Lancamento lancamento = ((Lancamento) value); 
+			return lancamento.getId() == null ? null : lancamento.getId().toString();
+		}
+		return null;
+	}*/
 }
