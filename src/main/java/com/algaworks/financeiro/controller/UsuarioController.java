@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import com.algaworks.financeiro.controller.Usuario;
+import com.algaworks.financeiro.model.Usuario;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,6 +27,9 @@ public class UsuarioController implements Serializable {
 			Authentication authentication = context.getAuthentication();
 			if (authentication instanceof Authentication) {
 				usuario.setUsername(((User) authentication.getPrincipal()).getUsername());
+				//System.out.println("Teste ==> getPrincipal() ===> " + ((User)authentication.getPrincipal()).getUsername());
+				System.out.println("Teste ==> getPrincipal() ===> " + ((User)authentication.getPrincipal()).getUsername());
+				System.out.println("Testes ===> " + usuario);
 			}
 		}
 	}

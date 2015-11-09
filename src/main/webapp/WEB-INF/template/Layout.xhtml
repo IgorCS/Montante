@@ -28,8 +28,9 @@
 		<h:graphicImage library="algaworks" name="logo.png" />
 		
 		<div style="float: right; margin-right: 20px; margin-top: 8px">
-			<h:outputText value="Bem Vindo: #{usuarioController.usuario.username}!:"/>
-			
+			<!--  <h:outputText value="Bem Vindo: #{usuarioController.usuario.username}!:"/>-->
+				<h:outputText value="Bem Vindo: #{usuarioController.usuario.username}"/>
+			<!-- usuarioNovo.getNome()-->
 			 <h:outputLink value="#{facesContext.externalContext.requestContextPath}/j_spring_security_logout">
                     <h:outputText icon="ui-icon-close" value="SAIR"/> 
                 </h:outputLink>

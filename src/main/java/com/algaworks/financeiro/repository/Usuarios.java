@@ -5,62 +5,71 @@ import java.util.List;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
+import javax.persistence.NoResultException;
 
-import com.algaworks.financeiro.controller.Usuario;
-
-
+import com.algaworks.financeiro.model.Usuario;
 
 public class Usuarios implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	
 	private EntityManager manager;
 
 	@Inject
 	public Usuarios(EntityManager manager) {
 		this.manager = manager;
 	}
-
+	
 	public Usuario porId(Long id) {
-		return manager.find(Usuario.class, id);
+		return this.manager.find(Usuario.class, id);
 	}
-
-	public void adicionar(Usuario usuario) {
+	
+	public void adicionar(Usuario usuario){
 		this.manager.persist(usuario);
 	}
 
-	public Usuario guardar(Usuario usuario) {
+	public Usuario guardar(Usuario usuario){
 		return this.manager.merge(usuario);
 	}
+	
+	public Usuario porUsername(String username) {
+		return manager.find(Usuario.class, username);
+	}
 
+	
 	public List<Usuario> todosUsuarios() {
-		TypedQuery<Usuario> query = manager.createQuery("from Usuario", Usuario.class);
-		return query.getResultList();
+		// TODO filtrar apenas vendedores (por um grupo específico)
+		return this.manager.createQuery("from Usuario", Usuario.class)
+				.getResultList();
 	}
 	
 	
-
-	public Usuario userLogin() {
-		TypedQuery<Usuario> query = manager.createQuery("from Usuario", Usuario.class);
-		return query.getSingleResult();
-	}
-
-	/*public Usuario getUsuario(String nome, String senha) {
-
-		EntityManagerFactory factory = Persistence.createEntityManagerFactory("usuarios");
-		EntityManager em = factory.createEntityManager();
-
+	public Usuario porNome(String nome) {
+		Usuario usuario = null;
+		
 		try {
-			Usuario usuario = (Usuario) em
-					.createQuery("SELECT u from Usuario u where u.nome = :nome and u.senha = :senha")
-					.setParameter("nome", nome).setParameter("senha", senha).getSingleResult();
-
-			return usuario;
+			usuario = this.manager.createQuery("from Usuario where nome = :nome", Usuario.class)
+				.setParameter("nome", nome.toLowerCase()).getSingleResult();
 		} catch (NoResultException e) {
-			return null;
+			// nenhum usuário encontrado com o e-mail informado
 		}
+		
+		return usuario;
+	}
+	
+/*	public UsuarioNovo porNome(String nome) {
 
-	}*/
+	EntityManagerFactory factory = Persistence.createEntityManagerFactory("usuariosNovo");
+	EntityManager em = factory.createEntityManager();
 
+	try {
+		UsuarioNovo usuario = (UsuarioNovo) em
+				.createQuery("SELECT u from Usuario u where u.nome = :nome ")
+				.setParameter("nome", nome).getSingleResult();
+
+		return usuario;
+	} catch (NoResultException e) {
+		return null;
+	}*/	
+	
 }

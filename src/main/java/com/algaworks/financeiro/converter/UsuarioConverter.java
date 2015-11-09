@@ -6,14 +6,19 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
 
-import com.algaworks.financeiro.controller.Usuario;
+import com.algaworks.financeiro.model.Usuario;
 import com.algaworks.financeiro.repository.Usuarios;
+import com.algaworks.financeiro.util.cdi.CDIServiceLocator;
 
 @FacesConverter(forClass = Usuario.class)
 public class UsuarioConverter implements Converter {
 
 	@Inject // funciona graças ao OmniFaces
 	private Usuarios usuarios;
+	
+	public UsuarioConverter() {
+		this.usuarios = (Usuarios) CDIServiceLocator.getBean(Usuarios.class);
+	}
 	
 	@Override
 	public Object getAsObject(FacesContext context, UIComponent component, String value) {

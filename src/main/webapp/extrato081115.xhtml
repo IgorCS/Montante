@@ -19,6 +19,8 @@
 		<f:viewAction action="#{consultaLancamentosBean.calculaLucro}" />
 	</f:metadata>
 
+
+
 	<ui:define name="titulo">Extrato</ui:define>
 
 	<ui:define name="corpo">
@@ -37,23 +39,14 @@
 				</p:selectOneButton>-->
 
 
-				<!-- <p:outputLabel value="Pessoa" for="pessoa" />
+				<p:outputLabel value="Pessoa" for="pessoa" />
 				<p:selectOneMenu value="#{consultaLancamentosBean.pessoa}"
 					id="pessoa" filter="true" filterMatchMode="contains">
 
 					<f:selectItem itemLabel="Selecione" noSelectionOption="true" />
 					<f:selectItems value="#{consultaLancamentosBean.todasPessoas}"
 						var="pessoa" itemValue="#{pessoa}" itemLabel="#{pessoa.nome}" />
-				</p:selectOneMenu> -->
-				<p:messages showDetail="false" showSummary="true" autoUpdate="true" />
-			<p:outputLabel value="Usuario" for="usuario" />
-				<p:selectOneMenu value="#{consultaLancamentosBean.usuario}"
-						id="usuario" filter="true" filterMatchMode="contains">
-					<f:selectItem itemLabel="Selecione" noSelectionOption="true" />	
-					<f:selectItems value="#{consultaLancamentosBean.todosUsuarios}"
-						var="usuario" itemValue="#{usuario}" itemLabel="#{usuario.nome}" />
-						<f:ajax event="change" render="frm"/> 
-					</p:selectOneMenu>
+				</p:selectOneMenu>
 				<br /><br />
 				<!--  <p:commandButton value="Pesquisar"
 						action="#{consultaLancamentosBean.consultar}" icon="ui-icon-disk" />-->
@@ -150,7 +143,7 @@
 					value="Valor: #{consultaLancamentosBean.lucro}#{consultaLancamentosBean.total}" />-->
 			</p:panelGrid><br /><br />	
 			<h:outputText
-					value="Saldo:  #{consultaLancamentosBean.lucro}" /><br /><br />
+					value="Saldo total: #{consultaLancamentosBean.lucro}" /><br /><br />
 					<h:outputText
 					value="Total Negativado: #{consultaLancamentosBean.saldoNegativos}" /><br /><br />
 					<h:outputText

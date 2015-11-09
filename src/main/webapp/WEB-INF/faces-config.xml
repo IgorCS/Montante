@@ -7,10 +7,10 @@
 
 	<application>
 		<message-bundle>com.algaworks.financeiro.resources.Messages</message-bundle>
+		<locale-config>
+			<default-locale>pt_BR</default-locale>
+		</locale-config>
 	</application>
-
-
-
 
 
 	<navigation-rule>

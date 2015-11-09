@@ -13,8 +13,10 @@ import javax.inject.Named;
 import com.algaworks.financeiro.model.Lancamento;
 import com.algaworks.financeiro.model.Pessoa;
 import com.algaworks.financeiro.model.TipoLancamento;
+import com.algaworks.financeiro.model.Usuario;
 import com.algaworks.financeiro.repository.Lancamentos;
 import com.algaworks.financeiro.repository.Pessoas;
+import com.algaworks.financeiro.repository.Usuarios;
 import com.algaworks.financeiro.service.CadastroLancamentos;
 import com.algaworks.financeiro.service.NegocioException;
 
@@ -32,6 +34,11 @@ public class ConsultaLancamentosBean implements Serializable {
 
 	@Inject
 	private Pessoas pessoas;
+	
+	@Inject 
+	private Usuarios usuarios;
+	
+	
 	
 
 	private List<Lancamento> lancamentos;
@@ -62,8 +69,6 @@ public class ConsultaLancamentosBean implements Serializable {
 
 	private Pessoa pessoa;
 	
-	
-
 	public Pessoa getPessoa() {
 		return pessoa;
 	}
@@ -72,9 +77,12 @@ public class ConsultaLancamentosBean implements Serializable {
 		this.pessoa = pessoa;
 	}
 	
+	
+	
 	private Usuario usuario;
 	
 	
+
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -82,7 +90,10 @@ public class ConsultaLancamentosBean implements Serializable {
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
-
+	
+	
+	
+	
 	// POR NOME
 	/*
 	 * public String getNome() { return nome; }
@@ -90,7 +101,13 @@ public class ConsultaLancamentosBean implements Serializable {
 	 * public void setNome(String nome) { this.nome = nome; }
 	 */
 
+
+
 	private List<Pessoa> todasPessoas;
+	
+	private List<Usuario> todosUsuarios;
+
+	
 	
 	
 	public void buscaLanc() {
@@ -121,23 +138,25 @@ public class ConsultaLancamentosBean implements Serializable {
 	}
 
 	public void consultar() {
-
+		
 		//this.lancamentos = lancamentosRepository.lancePessoa(pessoa);
-		this.lancamentos = lancamentosRepository.todosLanc();		
+		this.lancamentos = lancamentosRepository.lancamentos(usuario);		
 		this.todasPessoas = this.pessoas.todasPessoas();
 		this.lancamento = new Lancamento();
 		this.pessoa = new Pessoa();
-		
-
+		this.todosUsuarios = this.usuarios.todosUsuarios();
+		this.usuario = new Usuario();
 	}
 	
 	public void extrato() {
 
-		this.lancamentos = lancamentosRepository.lancePessoa(pessoa);
+		this.lancamentos = lancamentosRepository.lancePessoa(usuario);
 		//this.lancamentos = lancamentosRepository.todosLanc();		
 		this.todasPessoas = this.pessoas.todasPessoas();
+		this.todosUsuarios = this.usuarios.todosUsuarios();
 		this.lancamento = new Lancamento();
 		this.pessoa = new Pessoa();
+		this.usuario = new Usuario();
 
 	}
 
@@ -163,23 +182,19 @@ public class ConsultaLancamentosBean implements Serializable {
 		// pessoa);
 		total = lancamentosRepository.calculaTotalMovimentado(tipoLancamento,
 				pessoa);
-
 		// lucro = lancamentosRepository.lucroTotal(pessoa);
-
 	}
 
 	public void calculaLucro() throws NegocioException {
-
-		//FacesContext context = FacesContext.getCurrentInstance();
+		 //FacesContext context = FacesContext.getCurrentInstance();
 		//Aqui faz a busca em lancamento pela Pessoa
-		this.lancamentos = lancamentosRepository.lancePessoa(pessoa);
+		this.lancamentos = lancamentosRepository.lancePessoa(usuario);
 
-		lucro = lancamentosRepository.lucroTotal(tipoLancamento, pessoa);
+		lucro = lancamentosRepository.lucroTotal(tipoLancamento, usuario);
 
-		total = lancamentosRepository.Lucro(tipoLancamento, pessoa);
+		total = lancamentosRepository.Lucro(tipoLancamento, usuario);
 
-		saldoNegativos = lancamentosRepository.saldoNegativo(tipoLancamento,
-				pessoa);
+		saldoNegativos = lancamentosRepository.saldoNegativo(tipoLancamento,usuario);
 
 	}
 
@@ -209,6 +224,10 @@ public class ConsultaLancamentosBean implements Serializable {
 
 	public List<Pessoa> getTodasPessoas() {
 		return this.todasPessoas;
+	}
+	
+	public List<Usuario> getTodosUsuarios() {
+		return this.todosUsuarios;
 	}
 
 	public TipoLancamento[] getTiposLancamentos() {

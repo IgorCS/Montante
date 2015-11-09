@@ -1,25 +1,22 @@
-package com.algaworks.financeiro.controller;
+package com.algaworks.financeiro.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.algaworks.financeiro.model.Pessoa;
-
-
-
 @Entity
-@Table(name = "usuario")
-public class Usuario implements Serializable  {
+@Table(name = "grupo")
+public class Grupo implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+
 	private Long id;
-	//private String nome;
-	//private Date dataLogin;
-	private String username;
+	private String nome;
+	private String descricao;
 
 	@Id
 	@GeneratedValue
@@ -30,38 +27,25 @@ public class Usuario implements Serializable  {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
-	
-	/*public String getNome() {
+
+	@Column(nullable=false, length=40)
+	public String getNome() {
 		return nome;
 	}
 
 	public void setNome(String nome) {
 		this.nome = nome;
-	}*/
-
-	/*public boolean isLogado() {
-		return username != null;
-	}	*/
-	
-	/*public Date getDataLogin() {
-		return dataLogin;
 	}
 
-	public void setDataLogin(Date dataLogin) {
-		this.dataLogin = dataLogin;
-	}*/	
-	
-	
-	public String getUsername() {
-		return username;
+	@Column(nullable=false, length=80)
+	public String getDescricao() {
+		return descricao;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
-		
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -78,7 +62,7 @@ public class Usuario implements Serializable  {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Usuario other = (Usuario) obj;
+		Grupo other = (Grupo) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -86,8 +70,5 @@ public class Usuario implements Serializable  {
 			return false;
 		return true;
 	}
-	
-	
-	
 
 }

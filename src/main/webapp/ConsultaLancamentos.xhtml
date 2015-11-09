@@ -24,7 +24,28 @@
 		<h1>Consulta de lançamentos</h1>
 
 		<h:form id="frm">
-			<p:messages showDetail="false" showSummary="true" autoUpdate="true" />
+		<p:messages showDetail="false" showSummary="true" autoUpdate="true" />
+			<p:outputLabel value="Usuario" for="usuario" />
+				<p:selectOneMenu value="#{consultaLancamentosBean.usuario}"
+						id="usuario" filter="true" filterMatchMode="contains">
+					<f:selectItem itemLabel="Selecione" noSelectionOption="true" />	
+					<f:selectItems value="#{consultaLancamentosBean.todosUsuarios}"
+						var="usuario" itemValue="#{usuario}" itemLabel="#{usuario.username}" />
+						<f:ajax event="change" render="frm"/> 
+					</p:selectOneMenu>
+				<br /><br />
+				
+						
+						<p:commandButton value="Busca:"
+						action="#{consultaLancamentosBean.consultar}"
+						icon="ui-icon-disk" update="@form" />
+						
+				<br /><br />		
+				
+						
+						
+						
+			
 
 			<p:dataTable value="#{consultaLancamentosBean.lancamentos}"
 				var="lancamento" border="1" cellspacing="0" cellpadding="2"
@@ -86,21 +107,21 @@
 
 				<p:column width="100" style="text-align: center">
 					<p:button
-						rendered="#{facesContext.externalContext.isUserInRole('ROLE_USER') or
-						facesContext.externalContext.isUserInRole('ROLE_ADMIN')}"
+						rendered="#{facesContext.externalContext.isUserInRole('USUARIOS') or
+						facesContext.externalContext.isUserInRole('ADMINISTRADORES')}"
 						icon="ui-icon-pencil" title="Editar" outcome="/CadastroLancamento">
 						<f:param name="id" value="#{lancamento.id}" />
 					</p:button>
 					
 					<p:button
-						rendered="#{facesContext.externalContext.isUserInRole('ROLE_USER') or
-						facesContext.externalContext.isUserInRole('ROLE_ADMIN')}"
+						rendered="#{facesContext.externalContext.isUserInRole('USUARIOS') or
+						facesContext.externalContext.isUserInRole('ADMINISTRADORES')}"
 						icon="ui-icon-calculator" title="Extrato" outcome="/extrato">
 						<f:param name="id" value="#{lancamento.id}" />
 					</p:button>
 					
 					<p:commandButton
-						rendered="#{facesContext.externalContext.isUserInRole('ROLE_ADMIN')}"
+						rendered="#{facesContext.externalContext.isUserInRole('ADMINISTRADORES')}"
 						icon="ui-icon-trash" title="Excluir" process="@this"
 						update="@form" action="#{consultaLancamentosBean.excluir}">
 						<f:setPropertyActionListener value="#{lancamento}"

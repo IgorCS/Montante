@@ -11,6 +11,7 @@ import javax.persistence.TypedQuery;
 import com.algaworks.financeiro.model.Lancamento;
 import com.algaworks.financeiro.model.Pessoa;
 import com.algaworks.financeiro.model.TipoLancamento;
+import com.algaworks.financeiro.model.Usuario;
 
 public class Lancamentos implements Serializable {
 
@@ -36,100 +37,104 @@ public class Lancamentos implements Serializable {
 		return query.getResultList();
 	}
 
-	public List<Lancamento> todosLanc() {
-		TypedQuery<Lancamento> query = manager.createQuery("from Lancamento",
-				Lancamento.class);		
+	public List<Lancamento> lancamentoUsuario(Usuario usuario) {
+		TypedQuery<Lancamento> query = manager
+				.createQuery("from Lancamento l where l.usuario=:usuario ",
+						Lancamento.class);
+		query.setParameter("usuario", usuario);
 		return query.getResultList();
 	}
 	
 	
-	public List<Lancamento> lancePessoa(Pessoa pessoa) {
-		TypedQuery<Lancamento> query = manager.createQuery("from Lancamento l where l.pessoa=:pessoa",
+	public List<Lancamento> lancamentos(Usuario usuario) {										
+		TypedQuery<Lancamento> query = manager.createQuery("from Lancamento l where l.usuario=:usuario ",
 				Lancamento.class);
-		query.setParameter("pessoa", pessoa);
-		return query.getResultList();
+        query.setParameter("usuario", usuario);       
+		return query.getResultList();		
 	}
-	
-	/*public List<Lancamento> lancPessoa() {
-		TypedQuery<Lancamento> query = manager.createQuery("from Lancamento l where l.pessoa = :pessoa",
-				Lancamento.class);
+
+	// SELECT * FROM Lancamento l INNER JOIN l.usuario u WHERE
+	// l.usuario=:usuario
+
+	/*public List<Lancamento> lancePessoa(Usuario usuario) {
+		TypedQuery<Lancamento> query = manager.createQuery(
+				"from Lancamento l where l.usuario=:usuario", Lancamento.class);
+		query.setParameter("usuario", usuario);
 		return query.getResultList();
 	}*/
-
 	
-	public BigDecimal calculaTotalMovimentado(TipoLancamento tipo,Pessoa pessoa) {
+	public List<Lancamento> lancePessoa(Usuario usuario) {
+		TypedQuery<Lancamento> query = manager.createQuery(
+				"from Lancamento l where l.usuario=:usuario"
+				, Lancamento.class);
+		query.setParameter("usuario", usuario);
+		return query.getResultList();
+		/*
+select usr.id, usr.name
+from User as usr
+left join usr.messages as msg
+group by usr.id, usr.name
+order by count(msg)
+		*/
+	}
+	
+
+	public List<Lancamento> todosLancamento(Usuario usuario) {
+		TypedQuery<Lancamento> query = manager.createQuery("from Lancamento l where l.usuario=:usuario ",
+				//SELECT * FROM lancamento AS l LEFT JOIN usuario_autorizacao AS u ON u.id=l.id  
+				//INNER JOIN usuario s ON(s.id=l.usuario_id) WHERE l.usuario_id=3
+				Lancamento.class);
+		query.setParameter("usuario", usuario);
+		 
+		return query.getResultList();		
+	}
+	
+	//Select * from lançamento l join l.pessoa p where p.nome...
+	//SELECT * FROM lancamento l JOIN usuario u ON(u.id=l.id) WHERE u.id=3
+	
+
+	public BigDecimal calculaTotalMovimentado(TipoLancamento tipo, Pessoa pessoa) {
 		String jpql = "select sum(l.valor) from Lancamento "
 				+ "l where l.pessoa = :pessoa and l.tipo= :tipo ";
-				javax.persistence.Query query = manager.createQuery(jpql);
+		javax.persistence.Query query = manager.createQuery(jpql);
 		query.setParameter("pessoa", pessoa);
-		query.setParameter("tipo", tipo);		
+		query.setParameter("tipo", tipo);
 		return (BigDecimal) ((javax.persistence.Query) query).getSingleResult();
 	}
-	
-	
-	public BigDecimal Lucro(TipoLancamento tipo,Pessoa pessoa) {
+
+	public BigDecimal Lucro(TipoLancamento tipo, Usuario usuario) {
 		String jpql = "select sum(l.valor) from Lancamento "
-				+ "l where l.pessoa = :pessoa and l.tipo='RECEITA' ";
-				javax.persistence.Query query = manager.createQuery(jpql);
-		query.setParameter("pessoa", pessoa);
-		//query.setParameter("tipo", tipo);		
+				+ "l where l.usuario = :usuario and l.tipo='RECEITA' ";
+		javax.persistence.Query query = manager.createQuery(jpql);
+		query.setParameter("usuario", usuario);
+		// query.setParameter("tipo", tipo);
 		return (BigDecimal) ((javax.persistence.Query) query).getSingleResult();
 	}
-	
-	public BigDecimal saldoNegativo(TipoLancamento tipo,Pessoa pessoa) {
+
+	public BigDecimal saldoNegativo(TipoLancamento tipo, Usuario usuario) {
 		String jpql = "select sum(-l.valor) from Lancamento "
-				+ "l where l.pessoa = :pessoa and l.tipo='DESPESA' ";
-				javax.persistence.Query query = manager.createQuery(jpql);
-		query.setParameter("pessoa", pessoa);
-		//query.setParameter("tipo", tipo);		
+				+ "l where l.usuario = :usuario and l.tipo='DESPESA' ";
+		javax.persistence.Query query = manager.createQuery(jpql);
+		query.setParameter("usuario", usuario);
+		// query.setParameter("tipo", tipo);
 		return (BigDecimal) ((javax.persistence.Query) query).getSingleResult();
 	}
-	
-	public BigDecimal lucroTotal(TipoLancamento tipo,Pessoa pessoa) {
-		String jpql = "select sum(l.valor) - (select sum(l.valor) FROM Lancamento l where l.tipo='DESPESA' and l.pessoa= :pessoa) "
-				+ "from Lancamento l WHERE l.tipo='RECEITA' and l.pessoa=:pessoa";
-				javax.persistence.Query query = manager.createQuery(jpql);
-		query.setParameter("pessoa", pessoa);			
+
+	public BigDecimal lucroTotal(TipoLancamento tipo, Usuario usuario) {
+		String jpql = "select sum(l.valor) - (select sum(l.valor) "
+				+ "FROM Lancamento l where l.tipo='DESPESA' and l.usuario= :usuario) "
+				+ "from Lancamento l WHERE l.tipo='RECEITA' and l.usuario=:usuario";
+		javax.persistence.Query query = manager.createQuery(jpql);
+		query.setParameter("usuario", usuario);
 		return (BigDecimal) ((javax.persistence.Query) query).getSingleResult();
 	}
-	
-	/*SELECT SUM(l.valor)-(SELECT SUM(l.valor) 
-			FROM Lancamento WHERE l.tipo='DESPESA' AND l.pessoa=:pessoa) FROM Lancamento l 
-			WHERE AND l.tipo='RECEITA' AND l.pessoa=:pessoa*/	
-	
+
 	public void adicionar(Lancamento lancamento) {
-		     int count=1;	
-		     for( this.manager.persist(lancamento);  count <= 10 ; count++){
-		    	System.out.println(count);	     
-		     }
-		   }
-	
-	/* int  count=1;
-    for(trx.begin(); count <= 10 ; count++){
-        System.out.println(count);	
-    } */	
-	
-	/*public void adiciona(Tarefa tarefa) {
-		//int  count=1;
-		//  for(String sql = "insert into tarefas (descricao,nomeUsuario,dataAbertura,responsavel) "
-				//	+ "values (?,?,?,?)";  count <= 250 ; count++){
-	          //  System.out.println(sql);
-    String sql="insert into tarefas (descricao,nomeUsuario,dataAbertura,responsavel) "
-				+ "values (?,?,?,?)";
-	// INSERT INTO tabela(campo_da_data)VALUES(NOW())
-		try {
-			PreparedStatement stmt = this.connection.prepareStatement(sql);
-			stmt.setString(1, tarefa.getDescricao());
-			stmt.setString(2, tarefa.getNomeUsuario());
-			stmt.setDate  (3, (java.sql.Date) new Date(tarefa.getDataAbertura().getTimeInMillis()));
-            stmt.setString(4, tarefa.getResponsavel());
-			stmt.execute();
-			stmt.close();
-		} catch (SQLException e){
-		  throw new RuntimeException(e);
+		int count = 1;
+		for (this.manager.persist(lancamento); count <= 10; count++) {
+			System.out.println(count);
 		}
-	 
-	}*/
+	}
 
 	public Lancamento guarda(Lancamento lancamento) {
 		return this.manager.merge(lancamento);
@@ -138,5 +143,4 @@ public class Lancamentos implements Serializable {
 	public void remover(Lancamento lancamento) {
 		this.manager.remove(lancamento);
 	}
-
 }

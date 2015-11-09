@@ -37,12 +37,12 @@
 						var="pessoa" itemValue="#{pessoa}" itemLabel="#{pessoa.nome}" />
 				</p:selectOneMenu>				
 				
-				<p:outputLabel value="Usuario" for="usuario" />
+				<p:outputLabel value="Usuario" for="usuarioNovo" />
 				<p:selectOneMenu value="#{cadastroLancamentoBean.lancamento.usuario}"
-						id="usuario" filter="true" filterMatchMode="contains">
-					<f:selectItem itemLabel="#{usuarioController.usuario.username}" noSelectionOption="false" />	
+						id="usuarioNovo" filter="true" filterMatchMode="contains">
+					<f:selectItem itemLabel="Selecione" noSelectionOption="true" />	
 					<f:selectItems value="#{cadastroLancamentoBean.todosUsuarios}"
-						var="usuario" itemValue="#{usuario}" itemLabel="#{usuario.username}" />
+						var="usuarioNovo" itemValue="#{usuarioNovo}" itemLabel="#{usuarioNovo.nome}" />
 					</p:selectOneMenu>
 
 				<p:outputLabel value="Descrição" for="descricao" />
